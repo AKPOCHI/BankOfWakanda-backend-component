@@ -1,4 +1,5 @@
 ﻿using Data;
+using Data.Dtos;
 using Data.Models;
 using System;
 using System.Collections.Generic;
@@ -17,16 +18,16 @@ namespace Core.Services.CustomerService
             _context = context;
         }
 
-        public string CreateCustomer(string firstName,string lastName,string email,string phoneNumber,string PassWORD) 
+        public string CreateCustomer([FromBody()] CreateCustomerDto createCustomerDto)
         {
 
             var customer = new Customer()
             {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                PhoneNumber = phoneNumber,
-                PassWord = PassWORD,
+                FirstName = createCustomerDto.FirstName,
+                LastName = createCustomerDto.LastName,
+                Email = createCustomerDto.Email,
+                PhoneNumber = createCustomerDto.PhoneNumber,
+                PassWord = createCustomerDto.PassWord,
             };
             _context.Customers.Add(customer);
             _context.SaveChanges();

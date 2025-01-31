@@ -1,9 +1,13 @@
 ﻿
 
+using Data.Dtos;
+using Microsoft.AspNetCore.Mvc;
+
+
 namespace Core.Services.CustomerService
 {
     public interface ICustomerService
     {
-        string CreateCustomer(string firstName, string lastName, string email, string phoneNumber, string PassWORD);
+        string CreateCustomer([FromBody] CreateCustomerDto createCustomerDto);
     }
 }
