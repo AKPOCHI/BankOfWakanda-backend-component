@@ -1,4 +1,5 @@
 using Core.Services.CustomerService;
+using Data.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -15,10 +16,10 @@ namespace Api.Controllers
         }
 
         [HttpPost("Create-User")]
-        public string CreateCustomer(string firstName, string lastName, string email, string phoneNumber, string PassWORD)
+        public string CreateCustomer([FromBody] CreateCustomerDto createCustomerDto)
         {
            
-            _obj.CreateCustomer( firstName,  lastName, email,  phoneNumber,  PassWORD);
+            _obj.CreateCustomer(createCustomerDto);
             return "New user added successfully";
         }
 

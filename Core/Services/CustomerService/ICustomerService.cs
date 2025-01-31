@@ -8,6 +8,6 @@ namespace Core.Services.CustomerService
 {
     public interface ICustomerService
     {
-        string CreateCustomer([FromBody] CreateCustomerDto createCustomerDto);
+        string CreateCustomer(CreateCustomerDto createCustomerDto);
     }
 }

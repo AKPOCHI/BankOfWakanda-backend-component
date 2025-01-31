@@ -18,7 +18,7 @@ namespace Core.Services.CustomerService
             _context = context;
         }
 
-        public string CreateCustomer([FromBody()] CreateCustomerDto createCustomerDto)
+        public string CreateCustomer(CreateCustomerDto createCustomerDto)
         {
 
             var customer = new Customer()
