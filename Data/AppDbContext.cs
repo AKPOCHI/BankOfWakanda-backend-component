@@ -17,6 +17,7 @@ namespace Data
         }
 
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<CustomerAccount> CustomerAccounts { get; set; }
 
     }
 }

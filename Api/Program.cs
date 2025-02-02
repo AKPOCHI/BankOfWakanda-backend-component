@@ -1,6 +1,8 @@
+using Core.Services.AccountService;
 using Core.Services.CustomerService;
 using Data;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,15 @@ var connString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connString));
 builder.Services.AddScoped<ICustomerService,CustomerService>();
+builder.Services.AddScoped<ICustomerAccountService, CustomerAccountService>();
+
+//making my enum
+builder.Services.AddControllers()
+              .AddJsonOptions(options =>
+              {
+                  options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+              });
+
 
 
 

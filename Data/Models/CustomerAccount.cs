@@ -8,7 +8,7 @@ namespace Data.Models
         public Guid Id { get; set;} = Guid.NewGuid();
         public Guid CustomerId { get; set; }
         public AccountTypeEnum AccountType { get; set;}
-        public decimal AccountBallance { get; set; }
+        public decimal AccountBallance { get; set; } = decimal.Zero;
         public string AccountNumber { get; set; }
 
     }
