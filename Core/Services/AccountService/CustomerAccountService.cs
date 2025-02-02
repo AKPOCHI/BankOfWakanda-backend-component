@@ -16,8 +16,25 @@ public CustomerAccountService(AppDbContext context)
 
         public string CreateCustomerAccount(Guid customerId, AccountTypeEnum accountTypeEnum)
         {
+
             var customerAccount = new CustomerAccount();
-           // var accountTypeEnum = new AccountTypeEnum();
+            // check to see that a customer has only one savings and current account
+            var savingsAccountCheck = _context.CustomerAccounts.Where(x => x.Id == customerId && customerAccount.AccountType == AccountTypeEnum.savings);
+            if(savingsAccountCheck != null)
+            {
+                return "maximum number of savings account reached you cant have more than one savings account";
+            }
+            // check to see that a customer has only one current account
+            var currentAccountCheck = _context.CustomerAccounts.Where(x => x.Id == customerId && customerAccount.AccountType==AccountTypeEnum.current);
+            if(currentAccountCheck != null)
+            {
+                return "maximum number of current account reached you cant have more than one current account";
+            }
+
+
+
+
+            // var accountTypeEnum = new AccountTypeEnum();
 
             customerAccount.AccountType = accountTypeEnum;
             customerAccount.CustomerId = customerId;
