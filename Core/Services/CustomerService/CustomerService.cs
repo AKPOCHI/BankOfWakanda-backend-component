@@ -20,7 +20,7 @@ namespace Core.Services.CustomerService
 
         public string CreateCustomer(CreateCustomerDto createCustomerDto)
         {
-
+            try { 
             var customer = new Customer()
             {
                 FirstName = createCustomerDto.FirstName,
@@ -34,6 +34,11 @@ namespace Core.Services.CustomerService
 
 
             return "Customer registered successfully";
+            }
+            catch (Exception ex)
+            {
+                return $"an error occured{ex.Message}";
+            }
         }
 
     }

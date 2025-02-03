@@ -16,16 +16,16 @@ public CustomerAccountService(AppDbContext context)
 
         public string CreateCustomerAccount(Guid customerId, AccountTypeEnum accountTypeEnum)
         {
-
+            try { 
             var customerAccount = new CustomerAccount();
-            // check to see that a customer has only one savings and current account
-            var savingsAccountCheck = _context.CustomerAccounts.Where(x => x.Id == customerId && customerAccount.AccountType == AccountTypeEnum.savings);
+            // check to see that a customer has only one savings
+            var savingsAccountCheck = _context.CustomerAccounts.Any(x => x.CustomerId == customerId && customerAccount.AccountType == AccountTypeEnum.savings);
             if(savingsAccountCheck != null)
             {
                 return "maximum number of savings account reached you cant have more than one savings account";
             }
             // check to see that a customer has only one current account
-            var currentAccountCheck = _context.CustomerAccounts.Where(x => x.Id == customerId && customerAccount.AccountType==AccountTypeEnum.current);
+            var currentAccountCheck = _context.CustomerAccounts.Any(x => x.CustomerId == customerId && customerAccount.AccountType==AccountTypeEnum.current);
             if(currentAccountCheck != null)
             {
                 return "maximum number of current account reached you cant have more than one current account";
@@ -49,7 +49,11 @@ public CustomerAccountService(AppDbContext context)
                 $"account type :{customerAccount.AccountType}\n" +
                 $"account Id:{customerAccount.CustomerId}";
 
-
+            }
+            catch(Exception ex)
+            {
+                return $"an error occured{ex.Message}";
+            }
 
         }
 
@@ -70,10 +74,20 @@ public CustomerAccountService(AppDbContext context)
 
         public string DepositFund(string accountNumber, decimal amt,Guid id)
         {
+            try { 
             var acctExist = _context.CustomerAccounts.FirstOrDefault(x => x.AccountNumber == accountNumber && x.Id == id );
             acctExist.AccountBallance += amt;
             _context.SaveChanges();
             return "successful deposit";
+            }
+            catch (OverflowException)
+            {
+                return "enter digit below 2 billion";
+            }
+            catch (Exception ex)
+            {
+                return $"an error occured pay close attention{ex.Message}";
+            }
 
         }
 
