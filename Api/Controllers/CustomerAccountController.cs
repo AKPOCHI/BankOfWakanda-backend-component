@@ -16,8 +16,8 @@ namespace Api.Controllers
         [HttpPost("create-Account")]
        public string CreateCustomerAccount(Guid customerId, AccountTypeEnum accountTypeEnum)
         {
-            _obj.CreateCustomerAccount(customerId, accountTypeEnum);
-            return "Your account has been created successfully";
+            return _obj.CreateCustomerAccount(customerId, accountTypeEnum);
+            
         }
 
         [HttpPatch("Deposit-funds")]
