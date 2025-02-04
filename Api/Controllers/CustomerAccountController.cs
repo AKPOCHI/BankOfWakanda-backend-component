@@ -27,6 +27,17 @@ namespace Api.Controllers
              
         }
 
+        [HttpPatch("Withdraw-Funds")]
+        public string WithdrawFunds(string accountNumber, decimal amt)
+        {
+            return _obj.WithdrawFunds(accountNumber, amt);
+        }
+
+        [HttpPatch("Transfer-funds-between-acct")]
+        public string TransferFunds(string senderaccountNumber, string receiveraccountNumber, decimal amt)
+        {
+           return _obj.TransferFunds(senderaccountNumber, receiveraccountNumber, amt);
+        }
 
 
     }
