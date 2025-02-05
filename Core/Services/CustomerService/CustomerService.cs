@@ -40,6 +40,24 @@ namespace Core.Services.CustomerService
                 return $"an error occured{ex.Message}";
             }
         }
+      
+        public string UpdateCustomerPhoneNumber(Guid id, string phoneNumber)
+        {
+            var customerExist = _context.Customers.FirstOrDefault(x => x.Id == id);
+            if (customerExist != null)
+            {
+                customerExist.PhoneNumber = phoneNumber;
+                _context.SaveChanges();
+            }
+            else
+            {
+                return "Customer does not exist";
+            }
+            return "An error occured";
+        }
+
+
+
 
     }
 }

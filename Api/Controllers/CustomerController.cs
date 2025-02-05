@@ -23,6 +23,12 @@ namespace Api.Controllers
             return "New user added successfully";
         }
 
+        [HttpPatch("update-customerPhonenumber")]
+        public string UpdateCustomerPhoneNumber(Guid id, string phoneNumber)
+        {
+            return _obj.UpdateCustomerPhoneNumber(id, phoneNumber);
+        }
+
 
     }
 }
