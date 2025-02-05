@@ -14,29 +14,29 @@ namespace Api.Controllers
         }
 
         [HttpPost("create-Account")]
-       public string CreateCustomerAccount(Guid customerId, AccountTypeEnum accountTypeEnum)
+       public async Task <string> CreateCustomerAccount(Guid customerId, AccountTypeEnum accountTypeEnum)
         {
-            return _obj.CreateCustomerAccount(customerId, accountTypeEnum);
+            return await _obj.CreateCustomerAccount(customerId, accountTypeEnum);
             
         }
 
         [HttpPatch("Deposit-funds")]
-        public string DepositFund(string accountNumber, decimal amt, Guid id)
+        public async Task <string> DepositFund(string accountNumber, decimal amt, Guid id)
         {
-            return _obj.DepositFund(accountNumber,amt, id);
+            return await _obj.DepositFund(accountNumber,amt, id);
              
         }
 
         [HttpPatch("Withdraw-Funds")]
-        public string WithdrawFunds(string accountNumber, decimal amt)
+        public async Task <string> WithdrawFunds(string accountNumber, decimal amt)
         {
-            return _obj.WithdrawFunds(accountNumber, amt);
+            return await _obj.WithdrawFunds(accountNumber, amt);
         }
 
         [HttpPatch("Transfer-funds-between-acct")]
-        public string TransferFunds(string senderaccountNumber, string receiveraccountNumber, decimal amt)
+        public async Task <string> TransferFunds(string senderaccountNumber, string receiveraccountNumber, decimal amt)
         {
-           return _obj.TransferFunds(senderaccountNumber, receiveraccountNumber, amt);
+           return await _obj.TransferFunds(senderaccountNumber, receiveraccountNumber, amt);
         }
 
 

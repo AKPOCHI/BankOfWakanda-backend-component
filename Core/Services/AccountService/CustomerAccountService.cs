@@ -14,7 +14,7 @@ namespace Core.Services.AccountService
             _context = context;
         }
 
-        public string CreateCustomerAccount(Guid customerId, AccountTypeEnum accountTypeEnum)
+        public async Task <string> CreateCustomerAccount(Guid customerId, AccountTypeEnum accountTypeEnum)
         {
             try {
                 var customerAccount = new CustomerAccount();
@@ -29,8 +29,8 @@ namespace Core.Services.AccountService
                 customerAccount.CustomerId = customerId;
                 customerAccount.AccountNumber = GenerateAccountNumber();
 
-                _context.CustomerAccounts.Add(customerAccount);
-                _context.SaveChanges();
+              await  _context.CustomerAccounts.AddAsync(customerAccount);
+              await  _context.SaveChangesAsync();
 
 
                 return $"here are your account details. " +
@@ -61,12 +61,12 @@ namespace Core.Services.AccountService
         }
 
 
-        public string DepositFund(string accountNumber, decimal amt, Guid id)
+        public async Task <string> DepositFund(string accountNumber, decimal amt, Guid id)
         {
             try {
                 var acctExist = _context.CustomerAccounts.FirstOrDefault(x => x.AccountNumber == accountNumber && x.Id == id);
                 acctExist.AccountBallance += amt;
-                _context.SaveChanges();
+              await  _context.SaveChangesAsync();
                 return "successful deposit";
             }
             catch (OverflowException)
@@ -80,15 +80,15 @@ namespace Core.Services.AccountService
 
         }
 
-        public string WithdrawFunds(string accountNumber, decimal amt)
+        public async Task <string> WithdrawFunds(string accountNumber, decimal amt)
         {
             var acctExist = _context.CustomerAccounts.FirstOrDefault(x => x.AccountNumber == accountNumber);
             acctExist.AccountBallance -= amt;
-            _context.SaveChanges();
+          await  _context.SaveChangesAsync();
             return $"{amt} has been withdrawn from your account";
         }
 
-        public string TransferFunds(string senderaccountNumber, string receiveraccountNumber, decimal amt)
+        public async Task <string> TransferFunds(string senderaccountNumber, string receiveraccountNumber, decimal amt)
         {
             try 
             { 
@@ -100,7 +100,7 @@ namespace Core.Services.AccountService
                 {
                     senderAcctExist.AccountBallance -= amt;
                     receiverAcctExist.AccountBallance += amt;
-                    _context.SaveChanges() ;
+                   await _context.SaveChangesAsync() ;
 
                     return "Transfer completed successfully";
                 }
