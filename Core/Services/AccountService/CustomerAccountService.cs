@@ -90,35 +90,42 @@ namespace Core.Services.AccountService
 
         public string TransferFunds(string senderaccountNumber, string receiveraccountNumber, decimal amt)
         {
-            try { 
-            var customerAccount = new CustomerAccount();
-            var senderAcctExist = _context.CustomerAccounts.FirstOrDefault(x => x.AccountNumber == senderaccountNumber);
-            if (senderAcctExist.AccountBallance < amt)
-            {
-                senderAcctExist.AccountBallance -= amt;
-            }
-            else
-            {
-               return "Insufficient fund"; 
-            }
-                
-               
-               
+            try 
+            { 
+                var customerAccount = new CustomerAccount();
+                var senderAcctExist = _context.CustomerAccounts.FirstOrDefault(x => x.AccountNumber == senderaccountNumber);
+                var receiverAcctExist = _context.CustomerAccounts.FirstOrDefault(x => x.AccountNumber == receiveraccountNumber);
 
-            var receiverAcctExist = _context.CustomerAccounts.FirstOrDefault(x => x.AccountNumber == receiveraccountNumber);
-            if (receiverAcctExist == null)
+                if (senderAcctExist != null && receiverAcctExist != null && senderAcctExist.AccountBallance > amt)
                 {
-                    return "Receiver does not exist";
+                    senderAcctExist.AccountBallance -= amt;
+                    receiverAcctExist.AccountBallance += amt;
+                    _context.SaveChanges() ;
+
+                    return "Transfer completed successfully";
                 }
-            receiverAcctExist.AccountBallance += amt;
-            _context.SaveChanges();
-            return $"{amt} has been transfered from {senderAcctExist} to {receiverAcctExist}";
+                else if(senderAcctExist == null)
+                {
+                    return "Invalid Sender account";
+                }
+                else if (receiverAcctExist == null)
+                {
+                    return "Invalid receiver account";
+                }
+                else if(senderAcctExist.AccountBallance < amt)
+                {
+                    return "Insufficient fund";
+                }
+                else
+                {
+                    return "An error occurred";
+                }
             }
             catch (Exception ex)
             {
                 return $"an error occured{ex.Message}";
             }
-
+             
 
         }
         
@@ -136,5 +143,5 @@ namespace Core.Services.AccountService
 
 
 
-    }
-}
+ }
+
