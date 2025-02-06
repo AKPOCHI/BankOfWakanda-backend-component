@@ -20,8 +20,19 @@ namespace Core.Services.CustomerService
 
         public string CreateCustomer(CreateCustomerDto createCustomerDto)
         {
-            try { 
-            var customer = new Customer()
+            try {
+
+                // Validate first name before proceeding
+                if (!ValidateName(createCustomerDto.FirstName))
+                {
+                    return $"Invalid  {createCustomerDto.FirstName}. It should not start with a digit or letters A, B, or C.";
+                }
+                if (!ValidateName(createCustomerDto.LastName))
+                {
+                    return $"Invalid  {createCustomerDto.LastName}. It should not start with a digit or letters A, B, or C.";
+                }
+
+                var customer = new Customer()
             {
                 FirstName = createCustomerDto.FirstName,
                 LastName = createCustomerDto.LastName,
@@ -55,7 +66,25 @@ namespace Core.Services.CustomerService
             }
             return "An error occured";
         }
+         
 
+        private bool ValidateName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return false; // Invalid if null or empty
+            }
+
+            char firstChar = name[0];
+
+            // Check if the first character is a digit or a lowercase letter a, b, or c
+            if (char.IsDigit(firstChar) || (firstChar >= 'A' && firstChar <= 'C'))
+            {
+                return false; // Invalid if condition is met
+            }
+
+            return true; // Valid name
+        }
 
 
 
