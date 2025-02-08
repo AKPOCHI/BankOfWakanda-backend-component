@@ -8,7 +8,7 @@ namespace Data.Models
         public Guid AccountId { get; set; } 
         public DateTime DateOfTransaction { get; set; }
         public string TypeOfTransaction { get; set; }
-        public decimal TransactionAmount { get; set; }
+        public decimal Amount { get; set; }
         public string Description {get; set; }  
     }
 }

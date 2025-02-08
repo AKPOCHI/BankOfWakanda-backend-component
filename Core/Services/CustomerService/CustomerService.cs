@@ -22,14 +22,24 @@ namespace Core.Services.CustomerService
         {
             try {
 
-                // Validate first name before proceeding
-                if (!ValidateName(createCustomerDto.FirstName))
+                // Validate names before proceeding
+                string invalidName = ValidateName(createCustomerDto.FirstName);
+                if (!string.IsNullOrEmpty(invalidName))
                 {
-                    return $"Invalid  {createCustomerDto.FirstName}. It should not start with a digit or letters A, B, or C.";
+                    return $"Invalid {invalidName}. It should not start with a digit or letters A, B, or C.";
                 }
-                if (!ValidateName(createCustomerDto.LastName))
+
+                invalidName = ValidateName(createCustomerDto.LastName);
+                if (!string.IsNullOrEmpty(invalidName))
                 {
-                    return $"Invalid  {createCustomerDto.LastName}. It should not start with a digit or letters A, B, or C.";
+                    return $"Invalid {invalidName}. It should not start with a digit or letters A, B, or C.";
+                }
+
+                // Validate password
+                string passwordError = ValidatePassword(createCustomerDto.PassWord);
+                if (!string.IsNullOrEmpty(passwordError))
+                {
+                    return passwordError;
                 }
 
                 var customer = new Customer()
@@ -66,25 +76,49 @@ namespace Core.Services.CustomerService
             }
             return "An error occured";
         }
-         
 
-        private bool ValidateName(string name)
+
+        private string ValidateName(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name) || char.IsDigit(name[0]) || "ABC".Contains(char.ToUpper(name[0])))
             {
-                return false; // Invalid if null or empty
+                return name;
             }
-
-            char firstChar = name[0];
-
-            // Check if the first character is a digit or a lowercase letter a, b, or c
-            if (char.IsDigit(firstChar) || (firstChar >= 'A' && firstChar <= 'C'))
-            {
-                return false; // Invalid if condition is met
-            }
-
-            return true; // Valid name
+            return string.Empty;
         }
+
+
+
+        private string ValidatePassword(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
+            {
+                return "Password must be at least 8 characters long.";
+            }
+
+            if (!password.Any(char.IsUpper))
+            {
+                return "Password must contain at least one uppercase letter.";
+            }
+
+            if (!password.Any(char.IsLower))
+            {
+                return "Password must contain at least one lowercase letter.";
+            }
+
+            if (!password.Any(char.IsDigit))
+            {
+                return "Password must contain at least one digit.";
+            }
+
+            if (!password.Any(ch => "!@#$%^&*()-_+=<>?/.,;:'\"[]{}|".Contains(ch)))
+            {
+                return "Password must contain at least one special character.";
+            }
+
+            return string.Empty; // Password is valid
+        }
+
 
 
 
