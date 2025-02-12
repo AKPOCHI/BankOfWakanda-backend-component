@@ -18,9 +18,9 @@ namespace Api.Controllers
         [HttpPost("Create-User")]
         public string CreateCustomer([FromBody] CreateCustomerDto createCustomerDto)
         {
-           
-            _obj.CreateCustomer(createCustomerDto);
-            return "New user added successfully";
+
+            return _obj.CreateCustomer(createCustomerDto);
+          
         }
 
         [HttpPatch("update-customerPhonenumber")]

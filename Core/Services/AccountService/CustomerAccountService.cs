@@ -1,17 +1,22 @@
 ﻿
 
+using Core.Services.StatementOfAccount;
 using Data;
 using Data.Enum;
 using Data.Models;
+using Microsoft.Identity.Client;
 
 namespace Core.Services.AccountService
 {
     public class CustomerAccountService : ICustomerAccountService
     {
         private readonly AppDbContext _context;
-        public CustomerAccountService(AppDbContext context)
+        private readonly IStatementOfAccountService _statementOfAccountService;
+
+        public CustomerAccountService(AppDbContext context, IStatementOfAccountService statementOfAccountService)
         {
             _context = context;
+            _statementOfAccountService = statementOfAccountService;
         }
 
         public async Task <string> CreateCustomerAccount(Guid customerId, AccountTypeEnum accountTypeEnum)
@@ -28,7 +33,7 @@ namespace Core.Services.AccountService
                 customerAccount.AccountType = accountTypeEnum;
                 customerAccount.CustomerId = customerId;
                 customerAccount.AccountNumber = GenerateAccountNumber();
-
+               
               await  _context.CustomerAccounts.AddAsync(customerAccount);
               await  _context.SaveChangesAsync();
 
@@ -61,12 +66,17 @@ namespace Core.Services.AccountService
         }
 
 
-        public async Task <string> DepositFund(string accountNumber, decimal amt, Guid id)
+        public async Task <string> DepositFund(string accountNumber, decimal amt, Guid id, Guid customerId)
         {
             try {
-                var acctExist = _context.CustomerAccounts.FirstOrDefault(x => x.AccountNumber == accountNumber && x.Id == id);
+
+                var acctExist = _context.CustomerAccounts.FirstOrDefault(x => x.AccountNumber == accountNumber && x.Id == id && x.CustomerId == customerId);
                 acctExist.AccountBallance += amt;
-              await  _context.SaveChangesAsync();
+
+                _statementOfAccountService.SavetatementOfAccountService(acctExist.Id, customerId,DateTime.UtcNow.AddHours(1),"Deposit", amt,$"{DateTime.UtcNow.AddHours(1)} | ${amt} | {accountNumber}");
+
+
+                await _context.SaveChangesAsync();
                 return "successful deposit";
             }
             catch (OverflowException)

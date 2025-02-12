@@ -1,5 +1,6 @@
 using Core.Services.AccountService;
 using Core.Services.CustomerService;
+using Core.Services.StatementOfAccount;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -16,6 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connString));
 builder.Services.AddScoped<ICustomerService,CustomerService>();
 builder.Services.AddScoped<ICustomerAccountService, CustomerAccountService>();
+builder.Services.AddScoped<IStatementOfAccountService, StatementOfAccountService>();
 
 //making my enum
 builder.Services.AddControllers()

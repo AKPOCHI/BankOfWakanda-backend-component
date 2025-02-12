@@ -21,9 +21,9 @@ namespace Api.Controllers
         }
 
         [HttpPatch("Deposit-funds")]
-        public async Task <string> DepositFund(string accountNumber, decimal amt, Guid id)
+        public async Task <string> DepositFund(string accountNumber, decimal amt, Guid id, Guid customerId)
         {
-            return await _obj.DepositFund(accountNumber,amt, id);
+            return await _obj.DepositFund(accountNumber,amt, id,customerId);
              
         }
 

@@ -1,10 +1,12 @@
 ﻿using Data;
 using Data.Dtos;
 using Data.Models;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Core.Services.CustomerService
@@ -23,16 +25,16 @@ namespace Core.Services.CustomerService
             try {
 
                 // Validate names before proceeding
-                string invalidName = ValidateName(createCustomerDto.FirstName);
-                if (!string.IsNullOrEmpty(invalidName))
+                bool validName = ValidateName(createCustomerDto.FirstName);
+                if (validName == false)
                 {
-                    return $"Invalid {invalidName}. It should not start with a digit or letters A, B, or C.";
+                    return "invalid First Name supplied";
                 }
 
-                invalidName = ValidateName(createCustomerDto.LastName);
-                if (!string.IsNullOrEmpty(invalidName))
+                bool validLastName = ValidateName(createCustomerDto.LastName);
+                if (validLastName == false)
                 {
-                    return $"Invalid {invalidName}. It should not start with a digit or letters A, B, or C.";
+                    return "invalid Last Name supplied";
                 }
 
                 // Validate password
@@ -78,16 +80,33 @@ namespace Core.Services.CustomerService
         }
 
 
-        private string ValidateName(string name)
+        //private string ValidateName(string name)
+        //{
+        //    if (string.IsNullOrWhiteSpace(name) || char.IsDigit(name[0]) || "ABC".Contains(char.ToUpper(name[0])))
+        //    {
+        //        return name;
+        //    }
+        //    return string.Empty;
+        //}
+
+
+        public bool ValidateName(string name)
         {
-            if (string.IsNullOrWhiteSpace(name) || char.IsDigit(name[0]) || "ABC".Contains(char.ToUpper(name[0])))
+            //if (string.IsNullOrWhiteSpace(name))
+            //{
+            //    return false;
+            //}
+
+            string pattern = @"^[A-ZÀ-ÖØ-öø-ÿ][A-Za-zÀ-ÖØ-öø-ÿ' -]{1,49}$";
+            // Ensures the first letter is uppercase and the name is 2-50 characters long
+
+            if (Regex.IsMatch(name, pattern))
             {
-                return name;
+                return true;
             }
-            return string.Empty;
+
+            return false;
         }
-
-
 
         private string ValidatePassword(string password)
         {
